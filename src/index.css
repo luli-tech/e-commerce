@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.relative img {
+  border-radius: 20px;
+}
+.relative:hover img {
+  transform: scale(1.09);
+  transition: 0.3s;
+}
+
+.pro-desc {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.sub {
+  text-align: left;
+}
