@@ -90,7 +90,7 @@ function Navbar() {
           <a href="#" className="block text-gray-700 hover:text-black">Blog</a>
         </div>
       </nav>
-      <Outlet />
+      <Outlet className='outlet' />
       <div>
         <Footer />
       </div>

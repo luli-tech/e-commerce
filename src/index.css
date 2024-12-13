@@ -17,3 +17,6 @@
 .sub {
   text-align: left;
 }
+.outlet {
+  min-height: 100vh;
+}

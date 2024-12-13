@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { productData } from "../api/api";
+import { Link } from "react-router-dom";
 
 const Products = () => {
     let [da, setda] = useState([]);
@@ -29,8 +30,7 @@ const Products = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {da.map((product, index) => (
-                        <div
-                            key={index}
+                        <Link to={`/${product.id}`} key={product.id}
                             className="border rounded-lg shadow-md bg-white relative group overflow-hidden"
                         >
                             {/* Image */}
@@ -41,9 +41,9 @@ const Products = () => {
                                     className="w-auto h-full object-contain"
                                 />
                             </div>
-                            {/* Add to Cart Button */}
+                            {/* Add to Cart Button (Moved to bottom) */}
                             <button
-                                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 transition duration-300"
+                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-sm font-semibold px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300"
                                 onClick={() => alert(`Added ${product.title} to cart!`)}
                             >
                                 Add to Cart
@@ -58,7 +58,7 @@ const Products = () => {
                                     ${product.price}
                                 </p>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
