@@ -20,3 +20,7 @@
 .outlet {
   min-height: 100vh;
 }
+.dis {
+  display: flex;
+  flex-wrap: wrap;
+}
