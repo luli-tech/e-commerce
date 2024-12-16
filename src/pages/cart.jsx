@@ -2,8 +2,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeCart } from "../store/store";
 import { addToCart } from "../store/store";
 import CartTotals from "./cartTotal";
-import { useState, useEffect } from "react";
-import { pluscart } from "../store/store";
 
 const ShoppingCart = () => {
     let dispatch = useDispatch();
@@ -11,10 +9,10 @@ const ShoppingCart = () => {
     const add = (productData) => {
         dispatch(
             addToCart({ id: productData.id, title: productData.title, price: productData.price, image: productData.image, description: productData.description, }))
-    };
+    }
+
     const resetCart = () => {
-        // Add your logic to reset the cart, e.g., dispatch an action to clear the cart
-        dispatch({ type: "RESET_CART" }); // Example action
+        dispatch({ type: "RESET_CART" })
     };
     console.log(ActiveUsers?.cart)
 

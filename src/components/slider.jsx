@@ -16,12 +16,20 @@ const Slider = () => {
     setCurrentSlide((prev) => (prev === productData.length - 1 ? 0 : prev + 1));
   };
   useEffect(() => {
-    setTimeout(() => {
-      handleNext()
-    }, 1000)
-  }, [productData.length])
+    if (productData.length > 0) {
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 3000);
 
-  console.log(productData)
+      // Cleanup timeout on component unmount or state change
+      return () => clearTimeout(timer);
+    }
+  }, [currentSlide, productData.length]);
+
+  if (!productData || productData.length === 0) {
+    return <div>No products available for the slider.</div>;
+  }
+
   return (
     <div className="relative w-full h-[70vh] overflow-hidden">
       {/* Slides */}

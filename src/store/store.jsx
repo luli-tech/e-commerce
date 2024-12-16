@@ -1,10 +1,9 @@
 import { configureStore, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { db } from "../api/api";
 import storage from "redux-persist/lib/storage"; // Correct import
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
-
-
 
 
 export const fetchProducts = createAsyncThunk(
@@ -17,7 +16,7 @@ export const fetchProducts = createAsyncThunk(
             return rejectWithValue(error.response?.data || 'Something went wrong');
         }
     }
-);
+)
 
 // Initial state of the slice
 let initialState = {
@@ -70,12 +69,10 @@ let bazzarSlice = createSlice({
                 state.successmessage = "User registered and logged in";
             }
         },
-
-
-
         logout: (state) => {
             state.ActiveUsers = null; // Clear the active user session
-        }, addToCart: (state, action) => {
+        },
+        addToCart: (state, action) => {
             if (state.ActiveUsers) {
                 const existingItem = state.ActiveUsers.cart.find(
                     (item) => item.id === action.payload.id
