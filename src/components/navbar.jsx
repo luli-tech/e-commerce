@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 import Footer from './footer';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  let { ActiveUsers = null } = useSelector((state) => state.bazzar);
+  let length = ActiveUsers?.cart?.length
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
-
+  console.log(ActiveUsers)
   return (
     <>
-      <nav className="bg-white shadow-md w-full">
+      <ScrollRestoration />
+      <nav className="bg-white z-50 fixed top-0 left-0 shadow-md w-full">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="text-2xl font-bold text-gray-800">bazaar</div>
+            <Link to='/' className="text-2xl font-bold text-gray-800">bazaar</Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-6 items-center">
@@ -24,9 +28,9 @@ function Navbar() {
               <a href="#" className="text-gray-700 hover:text-black">Shop</a>
               <a href="#" className="text-gray-700 hover:text-black">Element</a>
               <a href="#" className="text-gray-700 hover:text-black">Blog</a>
-
+              <p>{ActiveUsers?.name}</p>
               {/* Icons */}
-              <div className="flex items-center space-x-4">
+              <Link to='/cart' className="flex items-center space-x-4">
                 <div className="relative">
                   <svg
                     className="w-6 h-6 text-gray-700 hover:text-black"
@@ -42,15 +46,17 @@ function Navbar() {
                       d="M3 3h18l-1 14H4L3 3zm4 14h10m-6-4h2"
                     />
                   </svg>
-                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{length}</span>
                 </div>
-
+              </Link>
+              <Link to='/login'>
                 <img
                   src="https://via.placeholder.com/30" // Placeholder avatar
                   alt="avatar"
                   className="w-8 h-8 rounded-full"
                 />
-              </div>
+              </Link>
+              <p>{ActiveUsers?.profile?.name}</p>
             </div>
 
             {/* Mobile Menu Button */}
@@ -79,7 +85,7 @@ function Navbar() {
         </div>
 
         {/* Mobile Menu with Transition */}
-        <div
+        <div onClick={toggleMobileMenu}
           className={`md:hidden px-4 py-2 bg-white border-t transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
             }`}
         >
@@ -88,9 +94,36 @@ function Navbar() {
           <a href="#" className="block text-gray-700 hover:text-black">Shop</a>
           <a href="#" className="block text-gray-700 hover:text-black">Element</a>
           <a href="#" className="block text-gray-700 hover:text-black">Blog</a>
+          <Link to='/cart' className="flex items-center space-x-4">
+            <div className="relative">
+              <svg
+                className="w-6 h-6 text-gray-700 hover:text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 3h18l-1 14H4L3 3zm4 14h10m-6-4h2"
+                />
+              </svg>
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{length}</span>
+            </div>
+            <Link to='/login'>
+              <img
+                src="https://via.placeholder.com/30" // Placeholder avatar
+                alt="avatar"
+                className="w-8 h-8 rounded-full"
+              /></Link>
+          </Link>
+          <p>{ActiveUsers?.profile?.name}</p>
         </div>
       </nav>
-      <Outlet className='outlet' />
+      <div className='outlet' >      <Outlet /></div>
+
       <div>
         <Footer />
       </div>

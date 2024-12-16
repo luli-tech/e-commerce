@@ -1,9 +1,10 @@
 import React from "react";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { SiVisa, SiMastercard, SiPaypal, SiStripe } from "react-icons/si";
 
 const Footer = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your form submission logic here
         alert("Subscribed successfully!");
     };
 
@@ -33,23 +34,32 @@ const Footer = () => {
                 {/* Address and Contact */}
                 <div>
                     <h2 className="text-xl font-semibold mb-4">Contact Us</h2>
-                    <p className="mb-2">📍 123 Business Street, City, Country</p>
-                    <p className="mb-2">📞 Phone: +1 234 567 890</p>
-                    <p>📧 Email: contact@yourcompany.com</p>
+                    <div className="flex items-center mb-2">
+                        <FaMapMarkerAlt className="text-blue-500 mr-2" />
+                        <p>123 Business Street, City, Country</p>
+                    </div>
+                    <div className="flex items-center mb-2">
+                        <FaPhoneAlt className="text-green-500 mr-2" />
+                        <p>+1 234 567 890</p>
+                    </div>
+                    <div className="flex items-center">
+                        <FaEnvelope className="text-red-500 mr-2" />
+                        <p>contact@yourcompany.com</p>
+                    </div>
                 </div>
 
                 {/* Profile, Payments, and Social Media */}
                 <div>
                     <h2 className="text-xl font-semibold mb-4">Follow Us</h2>
                     <p className="mb-4">Connect with us on social media:</p>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 text-xl">
                         <a
                             href="https://facebook.com"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-blue-500"
                         >
-                            Facebook
+                            <FaFacebook />
                         </a>
                         <a
                             href="https://twitter.com"
@@ -57,7 +67,7 @@ const Footer = () => {
                             rel="noopener noreferrer"
                             className="hover:text-blue-400"
                         >
-                            Twitter
+                            <FaTwitter />
                         </a>
                         <a
                             href="https://instagram.com"
@@ -65,7 +75,7 @@ const Footer = () => {
                             rel="noopener noreferrer"
                             className="hover:text-pink-500"
                         >
-                            Instagram
+                            <FaInstagram />
                         </a>
                         <a
                             href="https://linkedin.com"
@@ -73,31 +83,15 @@ const Footer = () => {
                             rel="noopener noreferrer"
                             className="hover:text-blue-700"
                         >
-                            LinkedIn
+                            <FaLinkedin />
                         </a>
                     </div>
                     <h2 className="text-xl font-semibold mt-6 mb-4">Payment Systems</h2>
-                    <div className="flex flex-wrap gap-4">
-                        <img
-                            src="https://via.placeholder.com/50x30?text=Visa"
-                            alt="Visa"
-                            className="h-8"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50x30?text=Mastercard"
-                            alt="Mastercard"
-                            className="h-8"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50x30?text=PayPal"
-                            alt="PayPal"
-                            className="h-8"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50x30?text=Stripe"
-                            alt="Stripe"
-                            className="h-8"
-                        />
+                    <div className="flex flex-wrap gap-4 text-2xl">
+                        <SiVisa className="text-blue-600" />
+                        <SiMastercard className="text-red-600" />
+                        <SiPaypal className="text-blue-400" />
+                        <SiStripe className="text-purple-500" />
                     </div>
                 </div>
             </div>

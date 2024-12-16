@@ -1,41 +1,31 @@
 import React, { useState } from "react";
-
+import { useSelector } from "react-redux";
+import { fetchProducts } from "../store/store";
+import { useEffect } from "react";
 const Slider = () => {
-  const slides = [
-    {
-      id: 1,
-      image: "https://via.placeholder.com/1200x600?text=Slide+1",
-      caption: "Get 15% off your first Fashion order",
-      subCaption: "Use the code: 15OFF",
-    },
-    {
-      id: 2,
-      image: "https://via.placeholder.com/1200x600?text=Slide+2",
-      caption: "Easy and FREE Returns",
-      subCaption: "Shop Now!",
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/1200x600?text=Slide+3",
-      caption: "Exclusive Deals",
-      subCaption: "Don't miss out!",
-    },
-  ];
+
+  let { productData } = useSelector(state => state.bazzar)
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handlePrev = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? productData.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === productData.length - 1 ? 0 : prev + 1));
   };
+  useEffect(() => {
+    setTimeout(() => {
+      handleNext()
+    }, 1000)
+  }, [productData.length])
 
+  console.log(productData)
   return (
     <div className="relative w-full h-[70vh] overflow-hidden">
       {/* Slides */}
-      {slides.map((slide, index) => (
+      {productData.map((slide, index) => (
         <div
           key={slide.id}
           className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
@@ -48,9 +38,10 @@ const Slider = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex flex-col justify-center px-8 sm:px-20 text-white space-y-4">
             <h1 className="text-3xl md:text-5xl font-extrabold">
-              {slide.caption}
+              {slide.title}
             </h1>
-            <p className="text-sm md:text-lg">{slide.subCaption}</p>
+            <p className="text-sm md:text-lg">{slide.description}</p>
+            <h5>${slide.price}</h5>
           </div>
         </div>
       ))}
@@ -75,7 +66,7 @@ const Slider = () => {
 
       {/* Dots */}
       <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-2">
-        {slides.map((_, idx) => (
+        {productData.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}

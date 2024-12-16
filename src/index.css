@@ -18,9 +18,13 @@
   text-align: left;
 }
 .outlet {
+  margin-top: 100px;
   min-height: 100vh;
 }
 .dis {
   display: flex;
   flex-wrap: wrap;
+}
+html {
+  scroll-behavior: smooth; /* This makes scrolling smooth */
 }
