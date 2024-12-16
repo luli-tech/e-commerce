@@ -1,10 +1,13 @@
 import { configureStore, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { db } from "../api/api";
+import { addDoc, collection, getDoc, setDoc } from "firebase/firestore";
 import storage from "redux-persist/lib/storage"; // Correct import
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
 
+
+let dbinstance = collection(db, 'product')
 
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts', // Action type
@@ -17,7 +20,15 @@ export const fetchProducts = createAsyncThunk(
         }
     }
 )
-
+async function setDb(instance, data) {
+    try {
+        const docRef = await addDoc(instance, data); // Add new document
+        return docRef.id; // Return document ID if needed
+    } catch (error) {
+        console.error("Error adding document:", error);
+        throw error;
+    }
+}
 // Initial state of the slice
 let initialState = {
     productData: [],
@@ -37,37 +48,32 @@ let bazzarSlice = createSlice({
         addUser: (state, action) => {
             const { email, name, photoURL } = action.payload;
 
-            // Check if user already exists in RegisteredCustomer
             const existingUser = state.RegisteredCustomer.find(
                 (user) => user.profile.email === email
             );
 
             if (existingUser) {
-                // If user exists, update authentication status
+                // Update authentication status for existing user
                 const updatedUser = { ...existingUser, isAuthenticated: true };
                 state.RegisteredCustomer = state.RegisteredCustomer.map((user) =>
                     user.profile.email === updatedUser.profile.email ? updatedUser : user
                 );
-
-                // Set ActiveUsers to the updated user
                 state.ActiveUsers = updatedUser;
                 state.successmessage = "Login success";
-
             } else {
-                // If user does not exist, register a new user
+
                 const newUser = {
                     profile: { email, name, photoURL },
                     cart: [],
-                    isAuthenticated: true, // Mark the new user as authenticated
+                    isAuthenticated: true,
                 };
-
-                // Add new user to RegisteredCustomer array
                 state.RegisteredCustomer.push(newUser);
-
-                // Set ActiveUsers to the new user
                 state.ActiveUsers = newUser;
                 state.successmessage = "User registered and logged in";
+                setDb(dbinstance, newUser);
             }
+
+            // Write the ActiveUsers data to Firestore
         },
         logout: (state) => {
             state.ActiveUsers = null; // Clear the active user session
@@ -79,11 +85,9 @@ let bazzarSlice = createSlice({
                 );
 
                 if (existingItem) {
-                    // If item already exists in the cart, update its quantity and total
                     existingItem.quantity += action.payload.quantity || 1;
                     existingItem.total = existingItem.price * existingItem.quantity;
                 } else {
-                    // If item is not in the cart, add it with quantity and total
                     state.ActiveUsers.cart.push({
                         ...action.payload,
                         quantity: action.payload.quantity || 1,
@@ -91,12 +95,8 @@ let bazzarSlice = createSlice({
                     });
                 }
 
-                // After adding the item, update the RegisteredCustomer array
-                state.RegisteredCustomer = state.RegisteredCustomer.map((user) =>
-                    user.profile.email === state.ActiveUsers.profile.email
-                        ? { ...user, cart: state.ActiveUsers.cart } // Update the cart in RegisteredCustomer
-                        : user
-                );
+                // After updating the cart, write to Firestore
+                setDb(dbinstance, state.ActiveUsers, state.ActiveUsers.profile.email);
             }
         },
         removeCart: (state, action) => {
@@ -153,9 +153,12 @@ const rootReducer = combineReducers({
 const persistreducer = persistReducer(persitStorage, rootReducer);
 
 let store = configureStore({
-    reducer: persistreducer
+    reducer: persistreducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false, // Avoid warnings with non-serializable data
+        }),
 });
-
 export const persistor = persistStore(store);
 
 export default store;
