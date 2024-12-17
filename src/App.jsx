@@ -4,6 +4,7 @@ import Home from './components/home'
 import ProductCard from './pages/product'
 import ShoppingCart from './pages/cart'
 import Login from './pages/login'
+import AddProductForm from './pages/addProductForm'
 
 import ShoppingPage from './pages/searchPage'
 import { RouterProvider, Route, createBrowserRouter, createRoutesFromElements, ScrollRestoration } from 'react-router-dom'
@@ -16,6 +17,7 @@ function App() {
         <Route path='cart' element={<ShoppingCart />} />
         <Route path='/login' element={<Login />} />
         <Route path='shop' element={<ShoppingPage />} />
+        <Route path='/addForm' element={<AddProductForm />} />
       </Route>
     )
   )

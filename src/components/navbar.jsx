@@ -27,7 +27,7 @@ function Navbar() {
               <NavLink to="/" className="text-gray-700 hover:text-black">Home</NavLink>
               <NavLink to="" className="text-gray-700 hover:text-black">Pages</NavLink>
               <NavLink to="/shop" className="text-gray-700 hover:text-black">Shop</NavLink>
-              <NavLink to="" className="text-gray-700 hover:text-black">Element</NavLink>
+              <NavLink to="/addForm" className="text-gray-700 hover:text-black">Add-Product</NavLink>
               <NavLink to="" className="text-gray-700 hover:text-black">Blog</NavLink>
               <p>{ActiveUsers?.name}</p>
               {/* Icons */}
@@ -91,11 +91,11 @@ function Navbar() {
           className={`md:hidden px-4 py-2 bg-white border-t transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
         >
           <div className="space-y-4">
-            <a href="#" className="block text-gray-700 hover:text-primary transition-colors">Home</a>
-            <a href="#" className="block text-gray-700 hover:text-primary transition-colors">Pages</a>
-            <a href="#" className="block text-gray-700 hover:text-primary transition-colors">Shop</a>
-            <a href="#" className="block text-gray-700 hover:text-primary transition-colors">Element</a>
-            <a href="#" className="block text-gray-700 hover:text-primary transition-colors">Blog</a>
+            <Link href="/" className="block text-gray-700 hover:text-primary transition-colors">Home</Link>
+            <Link href="#" className="block text-gray-700 hover:text-primary transition-colors">Pages</Link>
+            <Link to="/shop" className="block text-gray-700 hover:text-primary transition-colors">Shop</Link>
+            <Link to="/addForm" className="block text-gray-700 hover:text-primary transition-colors">Add-Product</Link>
+            <Link href="#" className="block text-gray-700 hover:text-primary transition-colors">Blog</Link>
 
             <Link to="/cart" className="flex items-center space-x-4">
               <div className="relative">
@@ -133,8 +133,9 @@ function Navbar() {
         </div>
 
       </nav>
-      <div className='outlet' >      <Outlet /></div>
-
+      <div className='min-h-screen my-20' >
+        <Outlet />
+      </div>
       <div>
         <Footer />
       </div>

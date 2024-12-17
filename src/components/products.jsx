@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { addToCart, fetchProducts } from "../store/store";  // Correct imports
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "./toast";
+import Loader from "./loader";
 import { toast } from "react-toastify";
 import Pagination from "./pagination"; // Pagination Component
 
@@ -19,7 +20,7 @@ const Products = () => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
-    if (status === 'loading') return <p>Loading...</p>;
+    if (status === 'loading') return <div><Loader /></div>;
     if (status === 'failed') return <p>Error: {error}</p>;
 
     // Handle adding to cart
