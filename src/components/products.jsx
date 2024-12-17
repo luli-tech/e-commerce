@@ -10,7 +10,7 @@ import Pagination from "./pagination"; // Pagination Component
 const Products = () => {
     const dispatch = useDispatch();
 
-    const { productData, status, error, } = useSelector((state) => state.bazzar);
+    const { productData, status, error, ActiveUsers } = useSelector((state) => state.bazzar);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,8 +32,8 @@ const Products = () => {
             image: productData.image,
             description: productData.description,
             total: productData.price * productData.quantity
-        }));
-        toast.success(`${productData.title} is added successfully`);
+        }))
+        toast.success(`${productData.title} is added successfully`)
     };
 
     // Handle page change

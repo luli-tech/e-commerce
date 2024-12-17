@@ -5,10 +5,9 @@ import { useDispatch } from 'react-redux';
 import Toast from '../components/toast';
 import Pagination from '../components/pagination';  // Pagination Component
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const ShoppingPage = () => {
-    let { id } = useParams()
+
     let dispatch = useDispatch();
     let { productData, ActiveUsers } = useSelector(state => state.bazzar);
     const [searchTerm, setSearchTerm] = useState('');
@@ -28,19 +27,19 @@ const ShoppingPage = () => {
     };
 
     // Filter products based on search term
-    const filteredProducts = productData.filter(product =>
+    const filteredProducts = productData?.filter(product =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Pagination logic
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const currentProducts = filteredProducts?.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
     // Cart total price
-    const totalPrice = ActiveUsers.cart?.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+    const totalPrice = ActiveUsers?.cart?.reduce((acc, item) => acc + item.price, 0).toFixed(2);
 
     // Handle page change
     const handlePageChange = (page) => {
@@ -71,8 +70,8 @@ const ShoppingPage = () => {
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {currentProducts.length > 0 ? (
-                        currentProducts.map((product) => (
+                    {currentProducts?.length > 0 ? (
+                        currentProducts?.map((product) => (
                             <div
                                 key={product.id}
                                 className="border rounded-lg shadow-md bg-white relative group overflow-hidden"

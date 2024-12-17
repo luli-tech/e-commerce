@@ -11,7 +11,7 @@ const ProductCard = () => {
 
     // Find the product by ID
     const product = productData?.find((product) => product.id === parseInt(id));
-    console.log(ActiveUsers.cart)
+    console.log(ActiveUsers?.cart)
     // Increment quantity
     const handleIncrement = () => {
         setQuantity((prevQuantity) => prevQuantity + 1);
