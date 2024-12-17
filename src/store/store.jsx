@@ -1,89 +1,71 @@
 import { configureStore, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-import storage from "redux-persist/lib/storage"; // Correct import
+import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
 
-
+// Async action to fetch products
 export const fetchProducts = createAsyncThunk(
-    'products/fetchProducts', // Action type
+    'products/fetchProducts',
     async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get('https://fakestoreapi.com/products');
-            return response.data; // Return the fetched products
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Something went wrong');
         }
     }
 );
 
-// Initial state of the slice
+// Initial state
 let initialState = {
     productData: [],
     cart: [],
     RegisteredCustomer: [],
-    ActiveUSers: null,
+    ActiveUsers: null,
     status: null,
     error: null,
     isLoading: false
 };
 
-// Create the slice
+// Create slice
 let bazzarSlice = createSlice({
-    name: 'bazzar',  // Fixed the typo here
+    name: 'bazzar',
     initialState,
     reducers: {
         addUser: (state, action) => {
             const { email, name, photoURL } = action.payload;
-
             const existingUser = state.RegisteredCustomer.find(
                 (user) => user.profile.email === email
             );
 
             if (existingUser) {
-                // If user exists, update authentication status
-                const updatedUser = { ...existingUser };
-                state.RegisteredCustomer = state.RegisteredCustomer.map((user) =>
-                    user.profile.email === updatedUser.profile.email ? updatedUser : user
-                );
-
-                // Set ActiveUsers to the updated user
-                state.ActiveUsers = updatedUser;
+                state.ActiveUsers = existingUser;
                 state.successmessage = "Login success";
-
             } else {
-                // If user does not exist, register a new user
                 const newUser = {
                     profile: { email, name, photoURL },
                     cart: [],
-                    isAuthenticated: true, // Mark the new user as authenticated
+                    isAuthenticated: true,
                 };
-
-                // Add new user to RegisteredCustomer array
                 state.RegisteredCustomer.push(newUser);
-
-                // Set ActiveUsers to the new user
                 state.ActiveUsers = newUser;
                 state.successmessage = "User registered and logged in";
             }
         },
-
-
-
         logout: (state) => {
-            state.ActiveUsers = null; // Clear the active user session
-        }, addToCart: (state, action) => {
+            state.ActiveUsers = null;
+        },
+        addToCart: (state, action) => {
             if (state.ActiveUsers) {
                 const existingItem = state.ActiveUsers.cart.find(
                     (item) => item.id === action.payload.id
                 );
 
                 if (existingItem) {
-                    // If item already exists in the cart, update its quantity and total
                     existingItem.quantity += action.payload.quantity || 1;
                     existingItem.total = existingItem.price * existingItem.quantity;
                 } else {
-                    // If item is not in the cart, add it with quantity and total
                     state.ActiveUsers.cart.push({
                         ...action.payload,
                         quantity: action.payload.quantity || 1,
@@ -91,10 +73,9 @@ let bazzarSlice = createSlice({
                     });
                 }
 
-                // After adding the item, update the RegisteredCustomer array
                 state.RegisteredCustomer = state.RegisteredCustomer.map((user) =>
                     user.profile.email === state.ActiveUsers.profile.email
-                        ? { ...user, cart: state.ActiveUsers.cart } // Update the cart in RegisteredCustomer
+                        ? { ...user, cart: state.ActiveUsers.cart }
                         : user
                 );
             }
@@ -105,14 +86,15 @@ let bazzarSlice = createSlice({
                     (product) => product.id !== action.payload.id
                 );
             }
-        }, pluscart: (state, action) => {
+        },
+        pluscart: (state, action) => {
             if (state.ActiveUsers) {
                 const item = state.ActiveUsers.cart.find(
                     (product) => product.id === action.payload.id
                 );
                 if (item) {
-                    item.quantity += 1; // Increment quantity
-                    item.total = item.price * item.quantity; // Recalculate total
+                    item.quantity += 1;
+                    item.total = item.price * item.quantity;
                 }
             }
         },
@@ -122,26 +104,25 @@ let bazzarSlice = createSlice({
             .addCase(fetchProducts.pending, (state) => {
                 state.status = 'loading';
                 state.isLoading = true;
-                state.error = null; // Reset error on pending state
+                state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                state.status = 'succeeded'; // Updated to 'succeeded' instead of 'success'
+                state.status = 'succeeded';
                 state.isLoading = false;
-                state.productData = action.payload; // Store the fetched products
+                state.productData = action.payload;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
                 state.isLoading = false;
-                state.error = action.payload || 'Failed to fetch products'; // Store the error message
+                state.error = action.payload || 'Failed to fetch products';
             });
     },
 });
 
 export const { addToCart, removeCart, pluscart, addUser, logout } = bazzarSlice.actions;
 
-// Configure the Redux store
-
-const persitStorage = {
+// Persist configuration
+const persistStorage = {
     key: 'root',
     storage,
     whitelist: ['bazzar']
@@ -150,10 +131,11 @@ const persitStorage = {
 const rootReducer = combineReducers({
     bazzar: bazzarSlice.reducer
 });
-const persistreducer = persistReducer(persitStorage, rootReducer);
+
+const persistReducerConfig = persistReducer(persistStorage, rootReducer);
 
 let store = configureStore({
-    reducer: persistreducer
+    reducer: persistReducerConfig
 });
 
 export const persistor = persistStore(store);
