@@ -12,7 +12,6 @@ const ShoppingCart = () => {
     }
 
     const resetCart = () => {
-        dispatch({ type: "RESET_CART" })
     };
     console.log(ActiveUsers?.cart)
 

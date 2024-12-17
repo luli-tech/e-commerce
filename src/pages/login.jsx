@@ -35,7 +35,7 @@ const Login = () => {
 
             // Clear the user from Redux store
             dispatch(logout());
-            persistor.purge()
+
         } catch (error) {
             console.error("Error signing out:", error.message);
         }

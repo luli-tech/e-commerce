@@ -1,24 +1,53 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { addToCart } from "../store/store";
+import { addToCart, fetchProducts } from "../store/store";  // Correct imports
+import { useDispatch, useSelector } from "react-redux";
 import Toast from "./toast";
 import { toast } from "react-toastify";
-import { fetchProducts } from "../store/store";  // Make sure you import the correct action
-import { useDispatch, useSelector } from "react-redux";
-const Products = () => {
-    let dispatch = useDispatch();
+import Pagination from "./pagination"; // Pagination Component
 
-    const { productData, status, error, ActiveUsers } = useSelector((state) => state.bazzar);
+const Products = () => {
+    const dispatch = useDispatch();
+
+    const { productData, status, error, } = useSelector((state) => state.bazzar);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 14; // You can adjust this based on your requirements
 
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
-    console.log(ActiveUsers)
+
     if (status === 'loading') return <p>Loading...</p>;
     if (status === 'failed') return <p>Error: {error}</p>;
-    function getToCart(productData) {
-        dispatch(addToCart({ id: productData.id, title: productData.title, price: productData.price, image: productData.image, description: productData.description, total: productData.price * productData.quantity })) & toast.success(`${productData.title} is added successfully`)
-    }
+
+    // Handle adding to cart
+    const getToCart = (productData) => {
+        dispatch(addToCart({
+            id: productData.id,
+            title: productData.title,
+            price: productData.price,
+            image: productData.image,
+            description: productData.description,
+            total: productData.price * productData.quantity
+        }));
+        toast.success(`${productData.title} is added successfully`);
+    };
+
+    // Handle page change
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    // Get the products for the current page
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = productData.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    // Pagination: Calculate total pages
+    const totalPages = Math.ceil(productData.length / productsPerPage);
+
     return (
         <div className="bg-white text-gray-800">
             <div className="container mx-auto px-4 py-8">
@@ -31,7 +60,7 @@ const Products = () => {
                 </div>
                 {/* Responsive Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {productData.map((product) => (
+                    {currentProducts.map((product) => (
                         <div
                             key={product.id}
                             className="border rounded-lg shadow-md bg-white relative group overflow-hidden"
@@ -60,6 +89,12 @@ const Products = () => {
                         </div>
                     ))}
                 </div>
+                {/* Pagination Component */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
             <Toast />
         </div>
