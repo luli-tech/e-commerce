@@ -156,7 +156,7 @@ function Navbar() {
         </div>
 
       </nav>
-      <div className='min-h-screen' >
+      <div className='min-h-screen py-15' >
         <Outlet />
       </div>
       <div>

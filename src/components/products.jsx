@@ -23,7 +23,7 @@ const Products = () => {
             id: productData.id,
             title: productData.title,
             price: productData.price,
-            image: productData.image,
+            image: productData.imgUrl,
             description: productData.description,
             total: productData.price * productData.quantity
         }));
@@ -49,7 +49,7 @@ const Products = () => {
         const emptyStarArray = Array(emptyStars).fill("☆");
 
         return (
-            <div className="flex space-x-1">
+            <div className="justify-center absolute top-0 left-0 right-0 flex items-center  bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300">
                 {fullStarArray.map((_, i) => (
                     <span key={`full-${i}`} className="text-yellow-500">★</span>
                 ))}
@@ -120,20 +120,21 @@ const Products = () => {
                             </Link>
                             {/* Add to Cart Button */}
                             <button
-                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-sm font-semibold px-1 py-1 rounded-md opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300"
+                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300"
                                 onClick={() => getToCart(product)}
                             >
                                 Add to Cart
                             </button>
                             {/* Product Details */}
-                            <div className="p-4 flex items-top justify-center text-center">
-                                <div>       <h2 className=" text-[15px] truncate">{product.title}</h2>
-                                    <p className="text-gray-600 text-sm">{product.category}</p></div>
+                            <div className="w-[100%] flex-col items-top justify-center text-center">
+                                <div className="flex justify-around flex-row"> <h2 className=" text-[12px] font-bold w-[40px] truncate uppercase">{product.title}</h2>
+                                    <p className="text-gray-600 text-[10px]">{product.category}</p>
+                                </div>
 
                                 {isNewProduct(product.dateAdded) && (
-                                    <span className="text-sm text-red-500 bg-yellow-100 px-2 py-1 rounded-full">New</span>
+                                    <span className="text-sm absolute top-0 text-red-500 bg-yellow-100 rounded-full">New</span>
                                 )}
-                                <p className="text-gray-800 text-[10px] font-semibold mt-2">${product.price}</p>
+                                <p className="text-gray-800 text-[10px] font-semibold">${product.price}</p>
                                 {renderStars(product.rating)} {/* Displaying star ratings */}
                             </div>
                         </div>

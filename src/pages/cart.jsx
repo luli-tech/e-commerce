@@ -9,7 +9,7 @@ const ShoppingCart = () => {
 
     const add = (productData) => {
         dispatch(
-            addToCart({ id: productData.id, title: productData.title, price: productData.price, image: productData.image, description: productData.description, }))
+            addToCart({ id: productData.id, title: productData.title, price: productData.price, image: productData.imgUrl, description: productData.description, }))
     }
 
     const remove = (product) => {
@@ -46,7 +46,7 @@ const ShoppingCart = () => {
 
                                 {/* Image */}
                                 <img
-                                    src={item.image}
+                                    src={item.imgUrl}
                                     alt={item.name}
                                     className="w-full md:w-16 md:h-16 max-w-[100px] max-h-[100px] object-cover rounded"
                                 />
