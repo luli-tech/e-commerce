@@ -6,15 +6,16 @@ import App from './App.jsx'
 import { app } from './api/api.jsx';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { Provider } from 'react-redux'
-import store, { persistor } from './store/store.jsx'
+import store from './store/store.jsx';
 import Toast from './components/toast.jsx';
+import { persistor } from './store/store.jsx';
 
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store} app={app}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate persistor={persistor}>
         <App />
         <Toast />
       </PersistGate>

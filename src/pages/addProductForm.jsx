@@ -1,144 +1,133 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { db } from "../api/api";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
+import Toast from "../components/toast";
+import FileStack from "../components/filestack";
+import { setDoc, doc, collection } from "firebase/firestore";
 
-const AddProductForm = ({ onAddProduct }) => {
-    // State for form inputs
+const AddProductForm = () => {
+    const [imgurl, setImgUrl] = useState('')
     const [product, setProduct] = useState({
-        name: '',
-        price: '',
-        quantity: '',
-        description: '',
-        category: ''
-
+        title: "",
+        price: "",
+        description: "",
+        category: "",
+        imgUrl: ''
     });
-    const [image, setImage] = useState(null);
+    const [status, setStatus] = useState({ message: "", type: "" });
+    const [loading, setLoading] = useState(false);
+    function handlefileupload(file) {
+        setProduct({ ...product, imgUrl: file })
+    }
+    // Categories Array
+    const categories = ["Electronics", "Books", "Clothing", "Home Appliances", "Beauty Products"];
 
-    // Handle image upload
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setImage(file);
+    const handleChange = (e) => {
+        setProduct({ ...product, [e.target.name]: e.target.value });
     };
 
-    // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!productName || !price || !quantity || !description || !image) {
-            alert('Please fill all fields, including the image.');
-            return;
+        setLoading(true);
+        if (!product.title || !product.price || !product.description || !product.category) {
+            setStatus({ message: "All fields are required!", type: "error" });
+            setLoading(false);
+            return; // Prevent submission if any field is empty
         }
 
-        // Create a product object
-        const newProduct = {
-            name: productName,
-            price: parseFloat(price),
-            quantity: parseInt(quantity),
-            description: description,
-            image: URL.createObjectURL(image), // Preview URL for the image
-        };
+        try {
+            const uniqueId = uuidv4(); // Generate unique ID inside handleSubmit
+            const productRef = doc(
+                collection(db, "ProductData"),
+                `${product.title}-ID(${uniqueId.slice(0, 5)})`
+            );
+            await setDoc(productRef, product);
 
-        // Pass product to parent function
-        onAddProduct(newProduct);
-
-        // Reset form fields
-        setProductName('');
-        setPrice('');
-        setQuantity('');
-        setDescription('');
-        setImage(null);
+            setStatus({ message: "Product added successfully!", type: "success" });
+            setProduct({
+                title: "",
+                price: "",
+                description: "",
+                category: "",
+                imgUrl: ''
+            });
+        } catch (error) {
+            setStatus({ message: "Failed to add product. Please try again.", type: "error" });
+            console.error("Error adding product: ", error);
+        } finally {
+            setLoading(false);
+        }
     };
-    function handleChange(e) {
-        setProduct({ ...product, [e.target.name]: e.target.value })
-    }
+
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
             <h2 className="text-2xl font-bold mb-4 text-center">Add New Product</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Product Name */}
-                <div>
-                    <label className="block mb-1 font-medium">Product Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={product.name}
-                        onChange={handleChange}
-                        placeholder="Enter product name"
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                    />
+
+            {status.message && (
+                <div
+                    className={`mb-4 text-center ${status.type === "success" ? "text-green-600" : "text-red-600"
+                        }`}
+                >
+                    {status.message}
                 </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {["title", "price", "description"].map((field) => (
+                    <div key={field}>
+                        <label htmlFor={field} className="block mb-1 font-medium">
+                            {field.charAt(0).toUpperCase() + field.slice(1)}
+                        </label>
+                        <input
+                            type={field === "price" ? "number" : "text"}
+                            id={field}
+                            name={field}
+                            value={product[field]}
+                            onChange={handleChange}
+                            placeholder={`Enter ${field}`}
+                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+                        />
+                    </div>
+                ))}
+
+                {/* Select for Category */}
                 <div>
-                    <label className="block mb-1 font-medium">Category</label>
-                    <input
-                        type="text"
+                    <label htmlFor="category" className="block mb-1 font-medium">
+                        Category
+                    </label>
+                    <select
+                        id="category"
                         name="category"
                         value={product.category}
                         onChange={handleChange}
-                        placeholder="Enter product name"
+                        required
                         className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                    />
+                    >
+                        <option value="" disabled>
+                            Select a category
+                        </option>
+                        {categories.map((cat, index) => (
+                            <option key={index} value={cat}>
+                                {cat}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Price */}
-                <div>
-                    <label className="block mb-1 font-medium">Price ($)</label>
-                    <input
-                        type="number"
-                        value={product.price}
-                        name='price'
-                        onChange={handleChange}
-                        placeholder="Enter price"
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                        min="0"
-                        step="0.01"
-                    />
-                </div>
-
-                {/* Quantity */}
-                <div>
-                    <label className="block mb-1 font-medium">Quantity</label>
-                    <input
-                        type="number"
-                        name='quantity'
-                        value={product.quantity}
-                        onChange={handleChange}
-                        placeholder="Enter quantity"
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                        min="1"
-                    />
-                </div>
-
-                {/* Description */}
-                <div>
-                    <label className="block mb-1 font-medium">Description</label>
-                    <textarea
-                        value={product.description}
-                        onChange={handleChange}
-                        name='description'
-                        placeholder="Enter product description"
-                        rows="3"
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                    ></textarea>
-                </div>
-
-                {/* Image Upload */}
-                <div>
-                    <label className="block mb-1 font-medium">Product Image</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none"
-                    />
-                </div>
-
-                {/* Submit Button */}
+                <FileStack handlefileupload={handlefileupload} />
                 <div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                        disabled={loading}
+                        className={`w-full ${loading ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-600"
+                            } text-white py-2 rounded-md transition duration-300`}
                     >
-                        Add Product
+                        {loading ? "Adding..." : "Add Product"}
                     </button>
                 </div>
             </form>
+            <Toast />
         </div>
     );
 };

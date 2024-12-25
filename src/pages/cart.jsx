@@ -1,19 +1,27 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeCart } from "../store/store";
-import { addToCart } from "../store/store";
+import { addToCart, clearCart, removeFromCart } from "../store/store";
 import CartTotals from "./cartTotal";
+
 
 const ShoppingCart = () => {
     let dispatch = useDispatch();
-    let { ActiveUsers } = useSelector((state) => state.bazzar);
+    let { publicData, cart } = useSelector((state) => state.bazzar);
+
     const add = (productData) => {
         dispatch(
             addToCart({ id: productData.id, title: productData.title, price: productData.price, image: productData.image, description: productData.description, }))
     }
 
+    const remove = (product) => {
+        dispatch(removeFromCart(product))
+    }
+
     const resetCart = () => {
-    };
-    console.log(ActiveUsers?.cart)
+        dispatch(clearCart())
+    }
+
+    console.log(publicData)
+    console.log(cart)
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-8">
@@ -22,7 +30,7 @@ const ShoppingCart = () => {
                 {/* Cart Section */}
                 <div className="flex-1">
                     <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
-                    {ActiveUsers?.cart.map((item) => (
+                    {cart?.map((item, id) => (
                         <div
                             key={item.id}
                             className="flex flex-col md:flex-row md:items-center justify-between border-b pb-4 mb-4 gap-4"
@@ -48,13 +56,13 @@ const ShoppingCart = () => {
                             <div className="flex-1">
                                 {/* Title with Clamp */}
                                 <h4 className="font-semibold line-clamp-2">{item.title}</h4>
-                                <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                                <p className="text-gray-600">${item.price}</p>
                             </div>
 
                             {/* Quantity Controls */}
                             <div className="flex md:items-center gap-2">
                                 <p className="text-gray-600 hidden md:block">Quantity</p>
-                                <button className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">
+                                <button onClick={() => remove(item)} className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">
                                     -
                                 </button>
                                 <p>{item.quantity}</p>
@@ -64,7 +72,7 @@ const ShoppingCart = () => {
                             </div>
 
                             {/* Total Price */}
-                            <p className="ml-0 md:ml-6 font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                            <p className="ml-0 md:ml-6 font-semibold">${(item.price * item.quantity)}</p>
                         </div>
                     ))}
 

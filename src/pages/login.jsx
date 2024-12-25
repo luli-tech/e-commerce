@@ -1,83 +1,94 @@
-import React from "react";
-import { FaGoogle, FaGithub } from "react-icons/fa";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { addUser, logout } from "../store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { persistor } from "../store/store";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth } from '../api/api';
+import { logout } from '../store/store';
+import { Log } from '../store/store';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
-    const { RegisteredCustomer, ActiveUsers } = useSelector((state) => state.bazzar);
+    let nav = useNavigate()
     const dispatch = useDispatch();
+    const { profile, isLogedIn, navigate } = useSelector((state) => state.bazzar);
 
-    const auth = getAuth(); // Firebase Auth
-    const provider = new GoogleAuthProvider(); // Google Auth Provider
+    const [credentials, setCredentials] = useState({
+        email: '',
+        password: '',
+    });
 
-    async function handleGoogleLogin(e) {
+    const handleInputChange = (e) => {
+        setCredentials({ ...credentials, [e.target.id]: e.target.value });
+    };
+
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await signInWithPopup(auth, provider);
-            const user = res.user;
-
-            // Dispatch the user data to Redux store
-            dispatch(addUser({
-                name: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL
-            }));
+            const res = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+            dispatch(Log({ name: res.user.displayName || 'User', email: res.user.email, uid: res.user.uid }));
+            nav('/')
+            console.log(res)
         } catch (error) {
-            console.error("Error during Google login:", error.message);
+            console.error('Login Error:', error.message);
         }
-    }
+    };
 
-    async function handleSignOut() {
+    const handleLogout = async () => {
         try {
             await signOut(auth);
-            console.log("User signed out successfully");
-
-            // Clear the user from Redux store
             dispatch(logout());
-
         } catch (error) {
-            console.error("Error signing out:", error.message);
+            console.error('Logout Error:', error.message);
         }
-    }
-
-    console.log("Registered Customer:", RegisteredCustomer);
-    console.log(ActiveUsers)
+    };
+    console.log(profile)
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="flex flex-col gap-6">
-                {/* Google Authentication */}
-                <div className="flex items-center gap-4">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+                <h2 className="text-2xl font-semibold text-center mb-6">
+                    {isLogedIn ? `Welcome, ${profile.name}` : 'Login'}
+                </h2>
+                {!isLogedIn ? (
+                    <form onSubmit={handleLogin}>
+                        <div className="mb-4">
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={credentials.email}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={credentials.password}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                        >
+                            Login
+                        </button>
+                    </form>
+                ) : (
                     <button
-                        onClick={handleGoogleLogin}
-                        className="flex items-center justify-center w-64 px-4 py-2 border border-gray-300 rounded-md shadow-md text-gray-700 bg-white hover:bg-gray-100 transition"
+                        onClick={handleLogout}
+                        className="w-full py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
                     >
-                        <FaGoogle className="mr-2 text-blue-500 text-xl" />
-                        Sign in with Google
+                        Logout
                     </button>
-                    <button
-                        onClick={handleSignOut}
-                        className="w-32 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-                    >
-                        Sign Out
-                    </button>
-                </div>
-
-                {/* GitHub Authentication */}
-                <div className="flex items-center gap-4">
-                    <button
-                        className="flex items-center justify-center w-64 px-4 py-2 border border-gray-300 rounded-md shadow-md text-gray-700 bg-white hover:bg-gray-100 transition"
-                    >
-                        <FaGithub className="mr-2 text-gray-700 text-xl" />
-                        Sign in with GitHub
-                    </button>
-                    <button
-                        onClick={handleSignOut}
-                        className="w-32 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-                    >
-                        Sign Out
-                    </button>
-                </div>
+                )}
             </div>
         </div>
     );

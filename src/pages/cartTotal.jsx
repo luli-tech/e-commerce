@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-useEffect
 
 const CartTotals = () => {
-    const subtotal = 200; // Replace with dynamic calculation if needed
-    const shippingDescription =
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos, veritatis.";
     let { cart } = useSelector(state => state.bazzar)
-    let total = cart.reduce((a, b) => a + b.price, 0)
-    useEffect(() => {
-        console.log(total)
-    })
+    let total = cart.reduce((a, b) => a + (b.total || 0), 0)
+
+    console.log(cart);
+    console.log(total);
+
     return (
         <div className="max-w-sm mx-auto bg-white p-6 rounded-md shadow-md border">
             <h2 className="text-xl font-semibold mb-4">Cart Totals</h2>

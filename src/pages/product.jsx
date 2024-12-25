@@ -7,20 +7,10 @@ const ProductCard = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
     const [quantity, setQuantity] = useState(1);
-    const { productData, ActiveUsers } = useSelector((state) => state.bazzar);
+    const { productData } = useSelector((state) => state.bazzar);
 
     // Find the product by ID
-    const product = productData?.find((product) => product.id === parseInt(id));
-    console.log(ActiveUsers?.cart)
-    // Increment quantity
-    const handleIncrement = () => {
-        setQuantity((prevQuantity) => prevQuantity + 1);
-    };
-
-    // Decrement quantity
-    const handleDecrement = () => {
-        setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : prevQuantity));
-    };
+    const product = productData?.find((product) => product.id === id);
 
     const getToCart = (product) => {
         dispatch(addToCart({ ...product, quantity }));
@@ -74,7 +64,7 @@ const ProductCard = () => {
                     {/* Quantity Selector */}
                     <div className="mt-6 flex items-center space-x-4">
                         <button
-                            onClick={handleDecrement}
+                            onClick
                             className="px-4 py-2 bg-gray-300 rounded-md text-lg font-bold"
                         >
                             -
@@ -83,7 +73,7 @@ const ProductCard = () => {
                             {quantity}
                         </span>
                         <button
-                            onClick={handleIncrement}
+                            onClick
                             className="px-4 py-2 bg-gray-300 rounded-md text-lg font-bold"
                         >
                             +

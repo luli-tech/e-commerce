@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchProducts } from "../store/store";
-import { useEffect } from "react";
-const Slider = () => {
 
-  let { productData } = useSelector(state => state.bazzar)
+const Slider = () => {
+  let { productData } = useSelector((state) => state.bazzar);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handlePrev = () => {
-    setCurrentSlide((prev) => (prev === 0 ? productData.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? productData?.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentSlide((prev) => (prev === productData.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === productData?.length - 1 ? 0 : prev + 1));
   };
+
   useEffect(() => {
-    if (productData.length > 0) {
+    if (productData?.length > 0) {
       const timer = setTimeout(() => {
         handleNext();
       }, 3000);
@@ -24,23 +23,22 @@ const Slider = () => {
       // Cleanup timeout on component unmount or state change
       return () => clearTimeout(timer);
     }
-  }, [currentSlide, productData.length]);
+  }, [currentSlide, productData?.length]);
 
-  if (!productData || productData.length === 0) {
+  if (!productData || productData?.length === 0) {
     return <div>No products available for the slider.</div>;
   }
 
   return (
-    <div className="relative w-full h-[70vh] overflow-hidden">
+    <div className="relative m-auto overflow-hidden min-w-[320px] max-w-[1200px] m-auto min-h-[50vh] max-h-[100vh]">
       {/* Slides */}
-      {productData.map((slide, index) => (
+      {productData?.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
+          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"}`}
         >
           <img
-            src={slide.image}
+            src={slide.imgUrl}
             alt={slide.caption}
             className="w-full h-full object-cover"
           />
@@ -78,8 +76,7 @@ const Slider = () => {
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}
-            className={`w-3 h-3 rounded-full transition-all ${currentSlide === idx ? "bg-white" : "bg-gray-500/60"
-              }`}
+            className={`w-3 h-3 rounded-full transition-all ${currentSlide === idx ? "bg-white" : "bg-gray-500/60"}`}
           />
         ))}
       </div>
