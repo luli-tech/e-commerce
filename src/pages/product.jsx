@@ -15,6 +15,7 @@ const ProductCard = () => {
     const getToCart = (product) => {
         dispatch(addToCart({ ...product, quantity }));
     };
+    console.log(productData)
 
     return (
         <div className="container mx-auto p-4">
@@ -22,7 +23,7 @@ const ProductCard = () => {
                 {/* Product Image */}
                 <div className="w-full sm:w-1/2 p-4">
                     <img
-                        src={product?.image}
+                        src={product?.imgUrl}
                         alt={product?.title}
                         className="w-full h-full object-cover"
                     />
@@ -64,7 +65,6 @@ const ProductCard = () => {
                     {/* Quantity Selector */}
                     <div className="mt-6 flex items-center space-x-4">
                         <button
-                            onClick
                             className="px-4 py-2 bg-gray-300 rounded-md text-lg font-bold"
                         >
                             -

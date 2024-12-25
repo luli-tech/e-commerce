@@ -49,7 +49,7 @@ const Products = () => {
         const emptyStarArray = Array(emptyStars).fill("☆");
 
         return (
-            <div className="justify-center absolute top-0 left-0 right-0 flex items-center  bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300">
+            <div className="justify-center bg-blue-950 absolute top-0 left-0 right-0 flex items-center   text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-90 group-hover:translate-y-0 translate-y-full transition-all duration-300">
                 {fullStarArray.map((_, i) => (
                     <span key={`full-${i}`} className="text-yellow-500">★</span>
                 ))}
@@ -120,7 +120,7 @@ const Products = () => {
                             </Link>
                             {/* Add to Cart Button */}
                             <button
-                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300"
+                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-blue-950 text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-90 group-hover:translate-y-0 translate-y-full transition-all duration-300"
                                 onClick={() => getToCart(product)}
                             >
                                 Add to Cart

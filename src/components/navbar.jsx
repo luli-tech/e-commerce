@@ -44,7 +44,7 @@ function Navbar() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to='/' className="text-2 font-bold text-gray-800">VERA</Link>
+            <Link to='/' className="text-2 font-bold text-blue-950">VERA</Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-6 items-center">
@@ -156,7 +156,7 @@ function Navbar() {
         </div>
 
       </nav>
-      <div className='min-h-screen py-15' >
+      <div className='min-h-screen py-20' >
         <Outlet />
       </div>
       <div>

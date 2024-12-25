@@ -23,6 +23,36 @@ const ShoppingPage = () => {
         setCurrentPage(1);
     };
 
+
+
+    const renderStars = (rating) => {
+        // Ensure the rating is a valid number between 0 and 5
+        const validRating = isNaN(rating) ? 0 : Math.min(Math.max(rating, 0), 5); // Ensures rating is clamped between 0 and 5
+        const fullStars = Math.floor(validRating);
+        const halfStars = validRating % 1 >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStars;
+
+        // Prevent rendering with invalid array length
+        const fullStarArray = Array(fullStars).fill("★");
+        const halfStarArray = halfStars === 1 ? ["☆"] : [];
+        const emptyStarArray = Array(emptyStars).fill("☆");
+
+        return (
+            <div className="justify-center absolute top-0 left-0 right-0 flex items-center   text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300">
+                {fullStarArray.map((_, i) => (
+                    <span key={`full-${i}`} className="text-yellow-500">★</span>
+                ))}
+                {halfStarArray.length > 0 && (
+                    <span className="text-yellow-500">☆</span>
+                )}
+                {emptyStarArray.map((_, i) => (
+                    <span key={`empty-${i}`} className="text-gray-400">☆</span>
+                ))}
+            </div>
+        );
+    };
+
+
     const filteredProducts = productData?.filter((product) =>
         product?.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -36,6 +66,12 @@ const ShoppingPage = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    const isNewProduct = (dateAdded) => {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        return new Date(dateAdded) > oneWeekAgo;
+    };
+
 
     const totalPrice = ActiveUsers?.cart?.reduce((acc, item) => acc + item.price, 0).toFixed(2);
 
@@ -59,37 +95,40 @@ const ShoppingPage = () => {
                     />
                 </div>
 
-                {/* Product Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {currentProducts?.length > 0 ? (
-                        currentProducts.map((product) => (
-                            <div key={product.id} className="border rounded-lg shadow-md bg-white relative group overflow-hidden">
-                                <Link to={`/${product.id}`} className="w-full h-48 flex justify-center items-center overflow-hidden">
-                                    <img
-                                        src={product.image}
-                                        alt={product.title}
-                                        className="w-auto h-full object-contain"
-                                    />
-                                </Link>
+                <div className="grid m-auto min-w-[400px] max-w-[60%] grid-cols-3 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3 gap-2">
+                    {currentProducts.map((product) => (
+                        <div
+                            key={product.id} className="border h-[150px] w-full rounded-lg shadow-md bg-white relative group overflow-hidden"
+                        >
+                            {/* Image */}
+                            <Link to={`/${product.id}`} className="w-full h-[100px] flex justify-center items-center overflow-hidden">
+                                <img
+                                    src={product.imgUrl}
+                                    alt={product.title}
+                                    className="h-full object-contain"
+                                />
+                            </Link>
+                            {/* Add to Cart Button */}
+                            <button
+                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300"
+                                onClick={() => getToCart(product)}
+                            >
+                                Add to Cart
+                            </button>
+                            {/* Product Details */}
+                            <div className="w-[100%] flex-col items-top justify-center text-center">
+                                <div className="flex justify-around flex-row"> <h2 className=" text-[12px] font-bold w-[40px] truncate uppercase">{product.title}</h2>
+                                    <p className="text-gray-600 text-[10px]">{product.category}</p>
+                                </div>
 
-                                <button
-                                    className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-sm font-semibold px-4 py-2 rounded-md opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300"
-                                    onClick={() => addCart(product)}
-                                    disabled={product.stock === 0}
-                                >
-                                    {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-                                </button>
-
-                                <Link to={`/${product.id}`} className="p-4 text-center">
-                                    <h2 className="font-bold text-lg truncate">{product.title}</h2>
-                                    <p className="text-gray-600 text-sm">{product.category}</p>
-                                    <p className="text-gray-800 font-semibold mt-2">${product.price}</p>
-                                </Link>
+                                {isNewProduct(product.dateAdded) && (
+                                    <span className="text-sm absolute top-0 text-red-500 bg-yellow-100 rounded-full">New</span>
+                                )}
+                                <p className="text-gray-800 text-[10px] font-semibold">${product.price}</p>
+                                {renderStars(product.rating)} {/* Displaying star ratings */}
                             </div>
-                        ))
-                    ) : (
-                        <p>No products found</p>
-                    )}
+                        </div>
+                    ))}
                 </div>
 
                 {/* Pagination */}

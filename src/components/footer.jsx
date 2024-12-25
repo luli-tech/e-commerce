@@ -9,96 +9,80 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-gray-800 text-white py-10 px-4 md:px-8">
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <footer className="bg-blue-950 text-white py-12 px-6 md:px-12">
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
                 {/* Subscription Form */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-4">Subscribe to Our Newsletter</h2>
-                    <p className="mb-4">Stay updated with the latest news and offers.</p>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-bold">Stay Updated</h2>
+                    <p className="text-sm text-gray-200">
+                        Subscribe to our newsletter to receive the latest news and exclusive offers.
+                    </p>
+                    <form onSubmit={handleSubmit} className="flex items-center gap-2">
                         <input
                             type="email"
                             placeholder="Enter your email"
                             required
-                            className="px-4 py-2 rounded-md text-gray-800 w-full"
+                            className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                         />
                         <button
                             type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-md text-white font-semibold"
+                            className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-2 rounded-lg font-semibold shadow-md"
                         >
                             Subscribe
                         </button>
                     </form>
                 </div>
 
-                {/* Address and Contact */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-4">Contact Us</h2>
-                    <div className="flex items-center mb-2">
-                        <FaMapMarkerAlt className="text-blue-500 mr-2" />
-                        <p>123 Business Street, City, Country</p>
+                {/* Contact Section */}
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-bold">Contact Us</h2>
+                    <div className="flex items-start gap-3">
+                        <FaMapMarkerAlt className="text-blue-200 text-lg" />
+                        <p className="text-sm text-gray-200">123 Business Street, City, Country</p>
                     </div>
-                    <div className="flex items-center mb-2">
-                        <FaPhoneAlt className="text-green-500 mr-2" />
-                        <p>+1 234 567 890</p>
+                    <div className="flex items-start gap-3">
+                        <FaPhoneAlt className="text-green-200 text-lg" />
+                        <p className="text-sm text-gray-200">+1 234 567 890</p>
                     </div>
-                    <div className="flex items-center">
-                        <FaEnvelope className="text-red-500 mr-2" />
-                        <p>contact@yourcompany.com</p>
+                    <div className="flex items-start gap-3">
+                        <FaEnvelope className="text-red-200 text-lg" />
+                        <p className="text-sm text-gray-200">contact@yourcompany.com</p>
                     </div>
                 </div>
 
-                {/* Profile, Payments, and Social Media */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-4">Follow Us</h2>
-                    <p className="mb-4">Connect with us on social media:</p>
+                {/* Social Media and Payments */}
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-bold">Follow Us</h2>
+                    <p className="text-sm text-gray-200">Connect with us on social media:</p>
                     <div className="flex gap-4 text-xl">
-                        <a
-                            href="https://facebook.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-blue-500"
-                        >
+                        <a href="https://facebook.com" className="hover:text-blue-100">
                             <FaFacebook />
                         </a>
-                        <a
-                            href="https://twitter.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-blue-400"
-                        >
+                        <a href="https://twitter.com" className="hover:text-blue-100">
                             <FaTwitter />
                         </a>
-                        <a
-                            href="https://instagram.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-pink-500"
-                        >
+                        <a href="https://instagram.com" className="hover:text-pink-100">
                             <FaInstagram />
                         </a>
-                        <a
-                            href="https://linkedin.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-blue-700"
-                        >
+                        <a href="https://linkedin.com" className="hover:text-blue-100">
                             <FaLinkedin />
                         </a>
                     </div>
-                    <h2 className="text-xl font-semibold mt-6 mb-4">Payment Systems</h2>
-                    <div className="flex flex-wrap gap-4 text-2xl">
-                        <SiVisa className="text-blue-600" />
-                        <SiMastercard className="text-red-600" />
-                        <SiPaypal className="text-blue-400" />
-                        <SiStripe className="text-purple-500" />
+                    <h2 className="text-2xl font-bold mt-6">Payment Methods</h2>
+                    <div className="flex items-center gap-4 text-2xl">
+                        <SiVisa className="text-blue-200" />
+                        <SiMastercard className="text-red-200" />
+                        <SiPaypal className="text-blue-100" />
+                        <SiStripe className="text-purple-200" />
                     </div>
                 </div>
             </div>
 
             {/* Footer Bottom */}
-            <div className="mt-8 text-center">
-                <p>© 2024 Your Company. All rights reserved.</p>
+            <div className="mt-12 border-t border-gray-400 pt-6 text-center">
+                <p className="text-sm text-gray-200">
+                    © 2024 Your Company. All rights reserved.
+                </p>
             </div>
         </footer>
     );
