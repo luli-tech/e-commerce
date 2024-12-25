@@ -30,7 +30,7 @@ const Slider = () => {
   }
 
   return (
-    <div className="relative m-auto overflow-hidden min-w-[320px] max-w-[1200px] m-auto min-h-[50vh] max-h-[100vh]">
+    <div className="relative overflow-hidden min-w-[320px] max-w-[1200px] m-auto min-h-[50vh] max-h-[100vh]">
       {/* Slides */}
       {productData?.map((slide, index) => (
         <div
