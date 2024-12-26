@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
+    "@stripe/react-stripe-js": "^3.1.1",
+    "@stripe/stripe-js": "^5.4.0",
     "axios": "^1.7.9",
     "filestack-js": "^3.36.4",
     "filestack-react": "^5.0.0",
@@ -23,9 +25,12 @@
     "react-loader-spinner": "^6.1.6",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.2",
+    "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^10.0.6",
     "redux-persist": "^6.0.0",
     "reselect": "^5.1.1",
+    "stripe": "^17.5.0",
+    "stripe-checkout": "^1.0.9",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

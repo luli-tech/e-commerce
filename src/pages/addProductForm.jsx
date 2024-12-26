@@ -3,29 +3,34 @@ import { db } from "../api/api";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import Toast from "../components/toast";
+import { useSelector } from "react-redux";
 import FileStack from "../components/filestack";
 import { setDoc, doc, collection } from "firebase/firestore";
 
 const AddProductForm = () => {
-    const [imgurl, setImgUrl] = useState('')
+    const { profile } = useSelector(state => state.bazzar)
     const [product, setProduct] = useState({
         title: "",
         price: "",
         description: "",
         category: "",
-        imgUrl: ''
+        imgUrl: '',
+        date: new Date().toLocaleDateString('en-GB'),
+        owner: profile.uid
     });
+
     const [status, setStatus] = useState({ message: "", type: "" });
     const [loading, setLoading] = useState(false);
     function handlefileupload(file) {
         setProduct({ ...product, imgUrl: file })
     }
     // Categories Array
-    const categories = ["Electronics", "Books", "Clothing", "Home Appliances", "Beauty Products"];
+    const categories = ["Electronics", 'Food', 'Pet', 'Drinks and Beverages', "Books", "Clothing", "Home Appliances", "Beauty Products"];
 
     const handleChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,6 +63,7 @@ const AddProductForm = () => {
         } finally {
             setLoading(false);
         }
+
     };
 
     return (

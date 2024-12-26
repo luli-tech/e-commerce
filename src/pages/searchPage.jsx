@@ -95,36 +95,36 @@ const ShoppingPage = () => {
                     />
                 </div>
 
-                <div className="grid m-auto min-w-[400px] max-w-[60%] grid-cols-3 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3 gap-2">
+                <div className="grid m-auto min-w-[400px] max-w-[60%] grid-cols-3 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3 gap-1">
                     {currentProducts.map((product) => (
                         <div
-                            key={product.id} className="border h-[150px] w-full rounded-lg shadow-md bg-white relative group overflow-hidden"
+                            key={product.id} className="border h-[150px] w-full shadow-md bg-white relative group overflow-hidden"
                         >
                             {/* Image */}
                             <Link to={`/${product.id}`} className="w-full h-[100px] flex justify-center items-center overflow-hidden">
                                 <img
                                     src={product.imgUrl}
                                     alt={product.title}
-                                    className="h-full object-contain"
+                                    className="h-full object-cover w-full"
                                 />
                             </Link>
                             {/* Add to Cart Button */}
                             <button
-                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-black text-white text-[10px] font-bold px-1 py-1  rounded-md opacity-0 group-hover:opacity-80 group-hover:translate-y-0 translate-y-full transition-all duration-300"
-                                onClick={() => getToCart(product)}
+                                className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-blue-950 text-white text-[10px] font-bold px-1 py-1 opacity-0 group-hover:opacity-90 group-hover:translate-y-0 translate-y-full transition-all duration-300"
+                                onClick={() => addCart(product)}
                             >
                                 Add to Cart
                             </button>
                             {/* Product Details */}
                             <div className="w-[100%] flex-col items-top justify-center text-center">
-                                <div className="flex justify-around flex-row"> <h2 className=" text-[12px] font-bold w-[40px] truncate uppercase">{product.title}</h2>
-                                    <p className="text-gray-600 text-[10px]">{product.category}</p>
+                                <div className="flex justify-around flex-row"> <h2 className=" text-[12px] font-bold w-[45%] truncate uppercase">{product.title}</h2>
+                                    <p className="text-gray-600 text-[15px]">{product.price}</p>
                                 </div>
 
                                 {isNewProduct(product.dateAdded) && (
                                     <span className="text-sm absolute top-0 text-red-500 bg-yellow-100 rounded-full">New</span>
                                 )}
-                                <p className="text-gray-800 text-[10px] font-semibold">${product.price}</p>
+                                <p className="text-gray-800 text-[13px] py-2 font-bold">{product.category}</p>
                                 {renderStars(product.rating)} {/* Displaying star ratings */}
                             </div>
                         </div>

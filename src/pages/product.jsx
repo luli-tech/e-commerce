@@ -59,7 +59,7 @@ const ProductCard = () => {
                         </div>
 
                         {/* Product Description */}
-                        <p className="text-sm text-gray-600 mt-4">{product?.description}</p>
+                        <p className="text-sm text-gray-600 mt-4">{product?.description}{product.date}</p>
                     </div>
 
                     {/* Quantity Selector */}

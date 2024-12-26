@@ -27,7 +27,7 @@ const FileStack = ({ handlefileupload }) => {
     };
 
     const handleFilePicker = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         setError(null); // Clear any previous errors
         const filestackClient = client.init(filestackApiKey);
         const picker = filestackClient.picker(filePickerOptions);
@@ -50,7 +50,6 @@ const FileStack = ({ handlefileupload }) => {
             </button>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {file && <img src={file} alt="Uploaded" style={{ marginTop: '20px', maxWidth: '100%' }} />}
-            <div>{uploaded}</div>
         </div>
     );
 };
